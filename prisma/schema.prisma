@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model forms {
+  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  slug               String      @unique
+  title              String      @unique
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  fields             fields[]
+  isPublished        Boolean     @default(false)
+  publishedAt        DateTime?
+  feedbacks          feedbacks[]
+  views              Int?        @default(0)
+  submissions        Int?        @default(0)
+  showOnSpecificURL  Boolean     @default(false)
+  specificURL        String?
+  showOnSpecificTime Boolean     @default(false)
+  specificTime       DateTime?
+  showOnSpecificDate Boolean     @default(false)
+  specificDate       DateTime?
+}
+
+model fields {
+  id           String   @id @map("_id") @db.ObjectId
+  type         String
+  label        String
+  required     Boolean  @default(false)
+  form         forms    @relation(fields: [formId], references: [id])
+  formId       String   @db.ObjectId
+  errorMessage String   @default("")
+  options      String[] @default([])
+  value        String?
+}
+
+model feedbacks {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  form      forms    @relation(fields: [formId], references: [id])
+  formId    String   @db.ObjectId
+  message   Json
+  createdAt DateTime @default(now())
+}
