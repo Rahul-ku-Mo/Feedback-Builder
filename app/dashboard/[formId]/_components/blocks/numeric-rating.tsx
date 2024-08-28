@@ -6,14 +6,19 @@ import { useState } from "react";
 const NumericRatingBlock = ({
   required = false,
   errorMessage = "Please rate the form",
+  value,
+  onChange,
 }: {
   required: boolean;
   errorMessage: string;
+  value: any;
+  onChange: (value: any) => void;
 }) => {
-  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+  const [selectedRating, setSelectedRating] = useState<number | null>(value);
 
   const handleRatingClick = (rating: number) => {
     setSelectedRating(rating);
+    onChange(rating);
   };
 
   return (

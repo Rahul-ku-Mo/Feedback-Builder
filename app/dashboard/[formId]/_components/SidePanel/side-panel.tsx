@@ -3,12 +3,10 @@
 import {
   Stack,
   Typography,
-
   List,
   ListItemText,
   ListItem,
   Paper,
-  
 } from "@mui/material";
 
 import StarIcon from "@mui/icons-material/Star";
@@ -23,6 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { customField } from "@/types";
 import { useBlocksStore } from "@/providers/block-store-provider";
 import LogicPanel from "./logic-pane";
+import { ObjectKeyGenerator } from "@/lib/object-key-generator";
 
 const CoreBlocks = [
   { id: 1, icon: <StarIcon />, name: "Star Rating", type: "starRating" },
@@ -57,15 +56,14 @@ const CoreBlocks = [
 function SidePanel() {
   const { addBlocks } = useBlocksStore((state) => state);
 
-
   const handleAddField = (type: string) => {
     const newField: customField = {
-      id: Date.now().toString(),
+      id: ObjectKeyGenerator()(),
       type,
       label: `Write your own Question`,
       required: false,
       errorMessage: "Please do not leave this field empty",
-      options: ["radio 1", 'radio 2', 'radio 3']
+      options: ["radio 1", "radio 2", "radio 3"],
     };
 
     addBlocks(newField);
@@ -141,7 +139,7 @@ function SidePanel() {
           </ListItem>
         ))}
       </List>
-      <LogicPanel/>
+      <LogicPanel />
     </Paper>
   );
 }

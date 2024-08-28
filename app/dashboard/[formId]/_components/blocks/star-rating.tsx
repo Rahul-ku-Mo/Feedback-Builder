@@ -6,26 +6,33 @@ import { FormHelperText, Rating } from "@mui/material";
 const StarRatingBlock = ({
   required = false,
   errorMessage = "Please rate the form",
+  value,
+  onChange,
 }: {
   required: boolean;
   errorMessage: string;
+  value: any;
+  onChange: (value: any) => void;
 }) => {
-  const [value, setValue] = useState<number | null>(0);
+  const [rating, setRating] = useState<number | null>(value);
+
+  const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: number | null) => {
+    setRating(newValue);
+    onChange(newValue);
+  };
 
   return (
     <>
       <Rating
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
+        value={rating}
+        onChange={handleRatingChange}
         name="star-rating"
         max={5}
         size="large"
       />
-      {required && value === null && (
+      {required && rating === null && (
         <FormHelperText
-          error={required && value === null}
+          error={required && rating === null}
           sx={{
             mx: 0,
             color: "red",

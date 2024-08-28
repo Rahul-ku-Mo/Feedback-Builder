@@ -1,5 +1,4 @@
-
-import { FormControl, Stack, Typography, Paper, } from "@mui/material";
+import { FormLabel, Stack, Typography, Paper, Box } from "@mui/material";
 import { CustomEditIcon } from "./shared/edit-custom-icon";
 import { CustomDeleteIcon } from "./shared/delete-custom-icon";
 
@@ -20,20 +19,22 @@ const BlockWrapper = ({
         w: "100%",
       }}
     >
-      <FormControl
+      <Box
         sx={{
           width: "100%",
           p: 0,
         }}
       >
-        <Typography
-          sx={{
-            py: 1,
-            fontSize: "14px",
-          }}
-        >
-          {label}
-        </Typography>
+        <FormLabel>
+          <Typography
+            sx={{
+              py: 1,
+              fontSize: "14px",
+            }}
+          >
+            {label}
+          </Typography>
+        </FormLabel>
         {children}
         <Stack
           direction="row"
@@ -43,10 +44,10 @@ const BlockWrapper = ({
             mt: 1,
           }}
         >
-          <CustomEditIcon id={id}/>
+          <CustomEditIcon id={id} />
           <CustomDeleteIcon id={id} />
         </Stack>
-      </FormControl>
+      </Box>
     </Paper>
   );
 };

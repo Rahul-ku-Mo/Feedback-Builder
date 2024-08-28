@@ -11,15 +11,21 @@ const RadioMultiSelectBlock = ({
   options,
   required,
   errorMessage,
+  value,
+  onChange,
 }: {
   options?: string[];
   required?: boolean;
   errorMessage?: string;
+  value: any;
+  onChange: (value: any) => void;
 }) => {
-  const [value, setValue] = useState("");
+  const [content, setContent] = useState(value);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
+    const newValue = (event.target as HTMLInputElement).value;
+    setContent(newValue);
+    onChange(newValue);
   };
 
   return (
@@ -27,7 +33,7 @@ const RadioMultiSelectBlock = ({
       <RadioGroup
         aria-labelledby="controlled-radio-buttons-group"
         name="controlled-radio-buttons-group"
-        value={value}
+        value={content}
         onChange={handleChange}
       >
         {options?.map((option, index) => (
@@ -39,11 +45,13 @@ const RadioMultiSelectBlock = ({
           />
         ))}
       </RadioGroup>
-      <FormHelperText sx={{
-        mx: 0,
-        color: "red",
-      }}>
-        {value === "" && required ? errorMessage : ""}
+      <FormHelperText
+        sx={{
+          mx: 0,
+          color: "red",
+        }}
+      >
+        {content === "" && required ? errorMessage : ""}
       </FormHelperText>
     </>
   );

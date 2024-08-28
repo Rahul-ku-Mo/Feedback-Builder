@@ -53,7 +53,6 @@ const FormViewer = () => {
               </Grid>
             );
           })}
-          <FeedbackFormModal open={true} handleClose={() => {}} formId={"da"}/>
         </>
       )}
     </Grid>

@@ -1,23 +1,26 @@
 "use client";
 
 import React, { useState } from "react";
-
 import { Stack, Box, FormHelperText } from "@mui/material";
-import { useBlocksStore } from "@/providers/block-store-provider";
 
 const CategoryBlock = ({
   options,
   required,
   errorMessage,
+  value,
+  onChange,
 }: {
   options?: string[];
   required: boolean;
   errorMessage?: string;
+  value: any;
+  onChange: (value: any) => void;
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(value);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
+    onChange(category);
   };
 
   return (
@@ -41,10 +44,12 @@ const CategoryBlock = ({
             {item}
           </Box>
         ))}
-        <FormHelperText sx={{
-          mx: 0,
-          color: "red",
-        }}>
+        <FormHelperText
+          sx={{
+            mx: 0,
+            color: "red",
+          }}
+        >
           {required && !selectedCategory ? errorMessage : ""}
         </FormHelperText>
       </Stack>

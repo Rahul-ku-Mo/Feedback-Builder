@@ -7,31 +7,55 @@ export type params = {
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: params }
+  context: { params: { formId: string } }
 ): Promise<NextResponse> {
-  const { isPublished, title } = await req.json();
+  let requestBody: any;
+  try {
+    requestBody = await req.json();
+  } catch (error) {
+    return NextResponse.json({ error: "Invalid JSON input" }, { status: 400 });
+  }
+
+  const { isPublished, title } = requestBody;
+  const { searchParams } = new URL(req.url);
+  const views = searchParams.get("views");
+  const submit = searchParams.get("submit");
 
   try {
-    if (isPublished === undefined) {
-      const form = await prisma.forms.update({
-        where: {
-          id: context.params.formId,
-        },
-        data: {
-          title,
-        },
-      });
-      return NextResponse.json(form, { status: 200 });
+    const data: any = {};
+
+    if (title !== undefined) {
+      data.title = title;
     }
+
+    if (isPublished !== undefined) {
+      data.isPublished = isPublished;
+      data.publishedAt = new Date();
+    }
+
+    if (views !== null) {
+      data.views = { increment: 1 };
+    }
+
+    if (submit !== null) {
+      data.submit = { increment: 1 };
+      data.views = { increment: 1 };
+    }
+
+    if (Object.keys(data).length === 0) {
+      return NextResponse.json(
+        { error: "No valid fields to update" },
+        { status: 400 }
+      );
+    }
+
+    console.log(data);
 
     const form = await prisma.forms.update({
       where: {
         id: context.params.formId,
       },
-      data: {
-        isPublished,
-        publishedAt: new Date(),
-      },
+      data,
     });
 
     return NextResponse.json(form, { status: 200 });
@@ -76,6 +100,33 @@ export async function PUT(
       },
       data: updateData,
     });
+
+    if (data.fields.length > 0) {
+      for (const field of data.fields) {
+        await prisma.fields.upsert({
+          where: {
+            id: field.id,
+          },
+          update: {
+            label: field.label,
+            type: field.type,
+          },
+          create: {
+            id: field.id,
+            label: field.label,
+            type: field.type,
+            required: field.required,
+            errorMessage: field.errorMessage,
+            options: field.options,
+            form: {
+              connect: {
+                id: context.params.formId,
+              },
+            },
+          },
+        });
+      }
+    }
 
     return NextResponse.json(form, { status: 200 });
   } catch (error: any) {

@@ -48,27 +48,39 @@ function IconContainer(props: IconContainerProps) {
   const { value, ...other } = props;
   return <span {...other}>{customIcons[value].icon}</span>;
 }
+
 const SmileyRatingBlock = ({
   required,
   errorMessage,
+  value,
+  onChange,
 }: {
   required: boolean;
   errorMessage: string;
+  value: any;
+  onChange: (value: any) => void;
 }) => {
-  const [value, setValue] = useState<number | null>(0);
+  const [rating, setRating] = useState<number | null>(value);
+
+  const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: number | null) => {
+    setRating(newValue);
+    onChange(newValue);
+  };
+
   return (
     <>
       <StyledRating
         name="highlight-selected-only"
-        defaultValue={0}
+        value={rating}
+        onChange={handleRatingChange}
         IconContainerComponent={IconContainer}
         getLabelText={(value: number) => customIcons[value].label}
         highlightSelectedOnly
         size="large"
       />
-      {required && value === 0 && (
+      {required && rating === null && (
         <FormHelperText
-        error={required && value === 0}
+          error={required && rating === null}
           sx={{
             mx: 0,
             color: "red",

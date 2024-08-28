@@ -26,7 +26,7 @@ const FeedbackAccordion = ({ formId }: { formId: string }) => {
       return feedbacks;
     },
   });
-
+  
   return (
     <>
       {isPending ? (
@@ -66,7 +66,7 @@ const FeedbackAccordion = ({ formId }: { formId: string }) => {
                   gap: 1,
                 }}
               >
-                {feedback.message.map((msg: any) => {
+                {feedback.message?.map((msg: any) => {
                   return (
                     <Stack spacing={0.5} key={msg.id}>
                       <Typography variant="body2" sx={{ fontWeight: 600 }}>

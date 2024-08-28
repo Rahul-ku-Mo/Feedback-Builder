@@ -139,7 +139,7 @@ const LogicPanel = () => {
               type="text"
               value={specificURL}
               onChange={handleSpecificURL}
-              placeholder="https://"
+              placeholder="Enter URL"
               variant="standard"
             />
           )}

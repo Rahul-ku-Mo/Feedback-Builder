@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { ObjectKeyGenerator } from "@/lib/object-key-generator";
 
 type Params = {
   formId: string;
@@ -10,16 +11,24 @@ export async function POST(
   context: { params: Params }
 ): Promise<NextResponse> {
   try {
-    const { message } = await req.json();
+    const { fields } = await req.json();
 
-    if (!message) {
+    if (!fields || !Array.isArray(fields)) {
       return NextResponse.json(
-        { error: "message are required" },
+        { error: "fields must be an array" },
         { status: 400 }
       );
     }
 
     const formId = context.params.formId.trim();
+
+    const message = fields.map((field: any, index: number) => ({
+      id: ObjectKeyGenerator()() + index,
+      label: field.label,
+      value: field.value,
+    }));
+
+   
 
     const [feedback, form] = await prisma.$transaction([
       prisma.feedbacks.create({

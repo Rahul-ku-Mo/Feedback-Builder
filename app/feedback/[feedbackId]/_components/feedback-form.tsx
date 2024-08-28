@@ -1,11 +1,15 @@
 "use client";
-
-import { Stack, Typography, Modal, AppBar } from "@mui/material";
+import { useState } from "react";
+import { Stack, Typography, Modal, AppBar, Button, Paper } from "@mui/material";
 import { blockTypeMap } from "@/app/dashboard/[formId]/_components/Canvas/canvas-blocks";
 import { useBlocksStore } from "@/providers/block-store-provider";
 import { useQuery } from "@tanstack/react-query";
-
+import Skeleton from "@mui/material/Skeleton";
 import { Close } from "@mui/icons-material";
+import {
+  useFormSubmit,
+  useFormView,
+} from "@/app/dashboard/hooks/useFormSubmit";
 import BlockWrapper from "@/app/dashboard/[formId]/_components/blocks/block-wrapper";
 const style = {
   position: "absolute" as "absolute",
@@ -23,12 +27,23 @@ const FeedbackFormModal = ({
   open,
   handleClose,
   formId,
+  formTitle,
 }: {
   open: boolean;
   handleClose: () => void;
   formId: string;
+  formTitle: string;
 }) => {
   const { blocks, setBlocks } = useBlocksStore((state) => state);
+
+  const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
+
+  const handleInputChange = (id: string, value: any) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [id]: value,
+    }));
+  };
 
   const { data, isPending } = useQuery({
     queryKey: ["blocks", formId],
@@ -45,11 +60,34 @@ const FeedbackFormModal = ({
     },
   });
 
+  const formSubmit = useFormSubmit(formId);
+
+  const viewSubmit = useFormView(formId);
+
+  const handleCloseWithFormViewSubmit = () => {
+    handleClose();
+    viewSubmit.mutate();
+  };
+
+  const handleSubmit = () => {
+    const formattedValues = blocks.map((block: any) => {
+      const value = formValues[block.id];
+      return {
+        label: block.label,
+        value: value,
+        id: block.id,
+      };
+    });
+
+    formSubmit.mutate({ fields: formattedValues });
+    handleClose();
+  };
+
   return (
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseWithFormViewSubmit}
         aria-labelledby="modal-create-form"
         aria-describedby="modal-create-form-description"
       >
@@ -73,9 +111,9 @@ const FeedbackFormModal = ({
                 fontWeight: 600,
               }}
             >
-              Form Name
+              {formTitle}
             </Typography>
-            <Close onClick={handleClose} />
+            <Close onClick={handleCloseWithFormViewSubmit} />
           </AppBar>
           <Stack
             spacing={1}
@@ -85,20 +123,58 @@ const FeedbackFormModal = ({
               maxHeight: "600px",
             }}
           >
-            {blocks?.map((block: any) => {
-              const Block = blockTypeMap[block.type];
-              return (
-                <BlockWrapper key={block.id} id={block.id} label={block.label}>
-                  <Block
-                    isCanvas={false}
-                    required={block.required}
-                    errorMessage={block.errorMessage}
-                    options={block.options}
-                  />
-                </BlockWrapper>
-              );
-            })}
+            {isPending ? (
+              <Skeleton height="500"  />
+            ) : (
+              <>
+                {blocks.length > 0 &&
+                  blocks.map((block: any) => {
+                    const Block = blockTypeMap[block.type];
+                    return (
+                      <BlockWrapper
+                        key={block.id}
+                        id={block.id}
+                        label={block.label}
+                      >
+                        <Block
+                          isCanvas={false}
+                          required={block.required}
+                          errorMessage={block.errorMessage}
+                          options={block.options}
+                          value={formValues[block.id] || ""}
+                          onChange={(value: any) =>
+                            handleInputChange(block.id, value)
+                          }
+                        />
+                      </BlockWrapper>
+                    );
+                  })}
+              </>
+            )}
           </Stack>
+
+          <Paper
+            elevation={5}
+            sx={{
+              display: " flex",
+              justifyContent: "center",
+              alignItems: "center",
+              py: 1,
+            }}
+          >
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              type="submit"
+              sx={{
+                width: "fit-content",
+                px: 3,
+                py: 1,
+              }}
+            >
+              Submit
+            </Button>
+          </Paper>
         </Stack>
       </Modal>
     </>

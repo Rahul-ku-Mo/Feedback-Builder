@@ -6,18 +6,25 @@ import TextField from "@mui/material/TextField";
 const TextAreaBlock = ({
   required = false,
   errorMessage = "Please enter a comment",
+  value,
+  onChange,
 }: {
   required: boolean;
   errorMessage: string;
+  value: any;
+  onChange: (value: any) => void;
 }) => {
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState(value);
 
-  const handleCommentChange = (event: any) => {
-    setComment(event.target.value);
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setComment(newValue);
+    onChange(newValue);
   };
 
   const handleClearComment = () => {
     setComment("");
+    onChange("");
   };
 
   return (

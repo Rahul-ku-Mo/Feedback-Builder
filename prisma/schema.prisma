@@ -26,7 +26,7 @@ model forms {
   views              Int?        @default(0)
   submissions        Int?        @default(0)
   showOnSpecificURL  Boolean     @default(false)
-  specificURL        String?
+  specificURL        String?     @unique
   showOnSpecificTime Boolean     @default(false)
   specificTime       DateTime?
   showOnSpecificDate Boolean     @default(false)
@@ -34,7 +34,7 @@ model forms {
 }
 
 model fields {
-  id           String   @id @map("_id") @db.ObjectId
+  id           String   @id @default("") @map("_id")
   type         String
   label        String
   required     Boolean  @default(false)

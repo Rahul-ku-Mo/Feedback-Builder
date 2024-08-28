@@ -2,7 +2,7 @@ export type customField = {
   id: string;
   type: any;
   label: string;
-  
+  value?: string;
   required?: boolean;
   errorMessage?: string;
   options?: string[];
