@@ -1,5 +1,5 @@
 "use client";
-
+import { toast } from "sonner";
 import {
   TextField,
   Stack,
@@ -51,6 +51,8 @@ const DeleteCardModal = ({
       queryClient.invalidateQueries({
         queryKey: ["forms"],
       });
+
+      toast.success("Form deleted successfully"); 
     }
   };
 

@@ -4,7 +4,7 @@ import "./globals.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query-client";
 import { BlocksStoreProvider } from "@/providers/block-store-provider";
-
+import { Toaster } from 'sonner';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,6 +23,8 @@ export default function RootLayout({
         <html lang="en">
           <body className={inter.className}>{children}</body>
         </html>
+        <Toaster />
+        
       </BlocksStoreProvider>
     </QueryClientProvider>
   );
