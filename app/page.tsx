@@ -130,8 +130,8 @@ export default function Home() {
         <FeedbackFormModal
           open={open}
           handleClose={handleClose}
-          formId={data.id}
-          formTitle={data.title}
+          formId={data?.id}
+          formTitle={data?.title}
         />
       )}
     </>
