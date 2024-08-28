@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AppBar,
   Toolbar,
@@ -7,6 +9,7 @@ import {
   CardContent,
   Stack,
   Paper,
+  Skeleton,
 } from "@mui/material";
 import FeedbackAccordion from "./_components/feedback-accordion";
 import dayjs from "dayjs";
@@ -14,15 +17,25 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
-const FeedbackForm = async ({ params }: { params: any }) => {
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/forms/${params.feedbackId}`
-  ).then((res) => res.json());
+const FeedbackForm = () => {
+  const params = useParams();
+
+  const { data, isPending } = useQuery({
+    queryKey: ["feedback", params.feedbackId],
+    queryFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/forms/${params.feedbackId}`
+      );
+      const data = await response.json();
+      return data;
+    },
+  });
 
   return (
     <Paper
@@ -48,38 +61,46 @@ const FeedbackForm = async ({ params }: { params: any }) => {
           py: 4,
         }}
       >
-        <Stack
-          sx={{
-            justifyContext: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h2" sx={{ fontSize: 56, fontWeight: 800 }}>
-            {data.views}
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.2px" }}
+        {isPending ? (
+          <Skeleton width={"76px"} height={"92px"} />
+        ) : (
+          <Stack
+            sx={{
+              justifyContext: "center",
+              alignItems: "center",
+            }}
           >
-            Views
-          </Typography>
-        </Stack>
-        <Stack
-          sx={{
-            justifyContext: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h2" sx={{ fontSize: 56, fontWeight: 800 }}>
-            {data.submissions}
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.2px" }}
+            <Typography variant="h2" sx={{ fontSize: 56, fontWeight: 800 }}>
+              {data?.views}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.2px" }}
+            >
+              Views
+            </Typography>
+          </Stack>
+        )}
+        {isPending ? (
+          <Skeleton width={"76px"} height={"92px"} />
+        ) : (
+          <Stack
+            sx={{
+              justifyContext: "center",
+              alignItems: "center",
+            }}
           >
-            Submissions
-          </Typography>
-        </Stack>
+            <Typography variant="h2" sx={{ fontSize: 56, fontWeight: 800 }}>
+              {data?.submissions}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.2px" }}
+            >
+              Submitted
+            </Typography>
+          </Stack>
+        )}
       </Stack>
       <Stack
         spacing={2}
@@ -120,7 +141,7 @@ const FeedbackForm = async ({ params }: { params: any }) => {
               <Typography sx={{ fontSize: "16px", fontWeight: 700, py: 1 }}>
                 Feedback List
               </Typography>
-              <FeedbackAccordion formId={params.feedbackId} />
+              <FeedbackAccordion formId={params.feedbackId as string} />
             </CardContent>
           </Card>
         </Grid>
