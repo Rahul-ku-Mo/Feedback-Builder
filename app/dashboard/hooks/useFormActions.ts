@@ -104,7 +104,7 @@ export const useFormCreate = () => {
         queryKey: ["forms"],
       });
 
-      router.push(`/dashboard/forms/${data.id}`);
+      router.push(`/dashboard/${data.id}`);
     },
   });
 };
