@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useFormCreate } from "../hooks/useFormActions";
 
 const style = {
@@ -35,6 +34,8 @@ const AddCardModal = ({
   const [value, setValue] = useState<string>("");
 
   const addForm = useFormCreate();
+
+ 
 
   return (
     <>
@@ -89,6 +90,8 @@ const AddCardModal = ({
                   if (value === "") return;
 
                   addForm.mutate(value);
+
+                  
                 }}
               >
                 CREATE

@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { queryClient } from "@/lib/query-client";
+import { useRouter } from "next/navigation";
 
 export const useFormTitle = (id: string) => {
   return useMutation({
@@ -83,6 +84,7 @@ export const usePublishForm = (id: string) => {
 };
 
 export const useFormCreate = () => {
+  const router = useRouter();
   return useMutation({
     mutationFn: async (value: string) => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forms`, {
@@ -97,10 +99,12 @@ export const useFormCreate = () => {
 
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["forms"],
       });
+
+      router.push(`/dashboard/forms/${data.id}`);
     },
   });
 };
