@@ -66,7 +66,7 @@ export async function PATCH(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: params }
+  context: { params: { formId: string } }
 ): Promise<NextResponse> {
   const data = await req.json();
 
@@ -94,6 +94,22 @@ export async function PUT(
   }
 
   try {
+    // Check if the specificURL already exists
+    if (data.showOnSpecificURL) {
+      const existingForm = await prisma.forms.findUnique({
+        where: {
+          specificURL: data.specificURL,
+        },
+      });
+
+      if (existingForm && existingForm.id !== context.params.formId) {
+        return NextResponse.json(
+          { error: "A form with this specific URL already exists." },
+          { status: 400 }
+        );
+      }
+    }
+
     const form = await prisma.forms.update({
       where: {
         id: context.params.formId,

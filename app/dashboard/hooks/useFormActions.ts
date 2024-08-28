@@ -59,6 +59,9 @@ export const useFormUpdate = (id: string) => {
 
       toast.success("Form updated successfully");
     },
+    onError: (error) => {
+      toast.error(error.message)
+    }
   });
 };
 
