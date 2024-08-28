@@ -126,7 +126,7 @@ export default function Home() {
           </Box>
         </Container>
       </main>
-      {isPending ? null : (
+      {data !== null && (
         <FeedbackFormModal
           open={open}
           handleClose={handleClose}
