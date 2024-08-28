@@ -34,11 +34,13 @@ export default function Home() {
   });
 
   useEffect(() => {
-    const feedbackShown = localStorage.getItem("feedbackShown");
-    if (!feedbackShown) {
+    if (data) {
+      const feedbackShown = localStorage.getItem("feedbackShown");
+      if (!feedbackShown) {
+        setOpen(true);
+      }
     }
-    setOpen(true);
-  }, []);
+  }, [data]);
 
   const handleClose = () => {
     setOpen(false);
