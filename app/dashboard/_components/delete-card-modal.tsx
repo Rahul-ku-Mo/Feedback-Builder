@@ -11,6 +11,7 @@ import {
 import { useFormStore } from "@/providers/form-store-provider";
 
 import { useRouter } from "next/navigation";
+import { queryClient } from "@/lib/query-client";
 
 const style = {
   position: "absolute" as "absolute",
@@ -46,6 +47,10 @@ const DeleteCardModal = ({
 
     if (response.ok) {
       deleteForm(id);
+
+      queryClient.invalidateQueries({
+        queryKey: ["forms"],
+      });
     }
   };
 
