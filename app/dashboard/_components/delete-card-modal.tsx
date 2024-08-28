@@ -52,7 +52,7 @@ const DeleteCardModal = ({
         queryKey: ["forms"],
       });
 
-    
+      toast.success("Form deleted successfully");
     }
   };
 

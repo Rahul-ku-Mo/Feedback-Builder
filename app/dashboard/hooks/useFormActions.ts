@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { queryClient } from "@/lib/query-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const useFormTitle = (id: string) => {
   return useMutation({
@@ -27,6 +28,8 @@ export const useFormTitle = (id: string) => {
       queryClient.invalidateQueries({
         queryKey: ["forms", id],
       });
+
+      toast.success("Form title updated successfully");
     },
   });
 };
@@ -53,6 +56,8 @@ export const useFormUpdate = (id: string) => {
       queryClient.invalidateQueries({
         queryKey: ["forms", id],
       });
+
+      toast.success("Form updated successfully");
     },
   });
 };
@@ -79,6 +84,8 @@ export const usePublishForm = (id: string) => {
       queryClient.invalidateQueries({
         queryKey: ["forms", id],
       });
+
+      toast.success("Form published successfully");
     },
   });
 };
@@ -104,6 +111,8 @@ export const useFormCreate = () => {
         queryKey: ["forms"],
       });
 
+      toast.success("Form created successfully");
+      
       router.push(`/dashboard/${data.id}`);
     },
   });

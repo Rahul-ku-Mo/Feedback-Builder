@@ -35,8 +35,6 @@ const AddCardModal = ({
 
   const addForm = useFormCreate();
 
- 
-
   return (
     <>
       <Modal
@@ -90,8 +88,6 @@ const AddCardModal = ({
                   if (value === "") return;
 
                   addForm.mutate(value);
-
-                  
                 }}
               >
                 CREATE

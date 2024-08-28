@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       data: {
         title,
         slug,
-        specificURL: "",
+        specificURL: null,
         showOnSpecificDate: false,
         showOnSpecificTime: false,
         showOnSpecificURL: false,
