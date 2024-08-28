@@ -159,14 +159,6 @@ export async function DELETE(
   const formId = context.params.formId;
 
   try {
-    // Delete related feedbacks first
-    await prisma.feedbacks.deleteMany({
-      where: {
-        formId: formId,
-      },
-    });
-
-    // Then delete the form
     const form = await prisma.forms.delete({
       where: {
         id: formId,

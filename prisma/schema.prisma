@@ -38,7 +38,7 @@ model fields {
   type         String
   label        String
   required     Boolean  @default(false)
-  form         forms    @relation(fields: [formId], references: [id])
+  form         forms    @relation(fields: [formId], references: [id], onDelete: Cascade)
   formId       String   @db.ObjectId
   errorMessage String   @default("")
   options      String[] @default([])
@@ -47,7 +47,7 @@ model fields {
 
 model feedbacks {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  form      forms    @relation(fields: [formId], references: [id])
+  form      forms    @relation(fields: [formId], references: [id], onDelete: Cascade)
   formId    String   @db.ObjectId
   message   Json
   createdAt DateTime @default(now())
