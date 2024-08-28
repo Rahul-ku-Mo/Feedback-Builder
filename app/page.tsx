@@ -22,9 +22,9 @@ export default function Home() {
     queryFn: async () => {
       const currentURL = window.location.href;
       const response = await fetch(
-        `http://localhost:3000/api/submit?specificURL=${encodeURIComponent(
-          currentURL
-        )}`
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/submit?specificURL=${encodeURIComponent(currentURL)}`
       );
 
       const data = await response.json();

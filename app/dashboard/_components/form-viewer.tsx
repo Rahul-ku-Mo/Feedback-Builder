@@ -10,7 +10,7 @@ const FormViewer = () => {
   const { data: forms, isPending } = useQuery({
     queryKey: ["forms"],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/api/forms`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forms`);
       const data = await response.json();
       return data;
     },

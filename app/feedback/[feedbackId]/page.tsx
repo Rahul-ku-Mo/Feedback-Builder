@@ -21,7 +21,7 @@ dayjs.extend(localizedFormat);
 
 const FeedbackForm = async ({ params }: { params: any }) => {
   const data = await fetch(
-    `http://localhost:3000/api/forms/${params.feedbackId}`
+    `${process.env.NEXT_PUBLIC_API_URL}/forms/${params.feedbackId}`
   ).then((res) => res.json());
 
   return (

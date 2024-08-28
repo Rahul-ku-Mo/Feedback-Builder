@@ -32,7 +32,7 @@ const LogicPanel = () => {
     queryKey: ["form", "logicDetails", formId],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/api/forms/${formId}/logic`
+        `${process.env.NEXT_PUBLIC_API_URL}/forms/${formId}/logic`
       );
 
       const data = await response.json();

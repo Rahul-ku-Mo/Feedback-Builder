@@ -49,7 +49,7 @@ const FeedbackFormModal = ({
     queryKey: ["blocks", formId],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/api/forms/${formId}/fields`
+        `${process.env.NEXT_PUBLIC_API_URL}/forms/${formId}/fields`
       );
 
       const data = await response.json();
@@ -124,7 +124,7 @@ const FeedbackFormModal = ({
             }}
           >
             {isPending ? (
-              <Skeleton height="500"  />
+              <Skeleton height="500" />
             ) : (
               <>
                 {blocks.length > 0 &&

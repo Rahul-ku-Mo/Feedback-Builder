@@ -12,13 +12,12 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-
 const FeedbackAccordion = ({ formId }: { formId: string }) => {
   const { data: feedbacks, isPending } = useQuery({
     queryKey: ["feedbacks", formId],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/api/submissions/${formId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/submissions/${formId}`
       );
 
       const feedbacks = await response.json();
@@ -26,7 +25,7 @@ const FeedbackAccordion = ({ formId }: { formId: string }) => {
       return feedbacks;
     },
   });
-  
+
   return (
     <>
       {isPending ? (

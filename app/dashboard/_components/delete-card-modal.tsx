@@ -37,9 +37,12 @@ const DeleteCardModal = ({
   const router = useRouter();
 
   const deleteFormFromDB = async () => {
-    const response = await fetch(`http://localhost:3000/api/forms/${id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/forms/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (response.ok) {
       deleteForm(id);

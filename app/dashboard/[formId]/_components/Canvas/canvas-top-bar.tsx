@@ -16,7 +16,9 @@ const CanvasTopBar = ({}) => {
   const { data, isPending } = useQuery({
     queryKey: ["forms", formId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/api/forms/${formId}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/forms/${formId}`
+      );
       const form = await response.json();
 
       return form;

@@ -6,7 +6,7 @@ export const useFormSubmit = (formId: string) => {
   return useMutation({
     mutationFn: async (value: any) => {
       const response = await fetch(
-        `http://localhost:3000/api/submissions/${formId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/submissions/${formId}`,
         {
           method: "POST",
           headers: {
@@ -27,7 +27,7 @@ export const useFormView = (formId: string) => {
   return useMutation({
     mutationFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/api/forms/${formId}?views=true`,
+        `${process.env.NEXT_PUBLIC_API_URL}/forms/${formId}?views=true`,
         {
           method: "PATCH",
           headers: {
